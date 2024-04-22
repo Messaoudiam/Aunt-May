@@ -1,10 +1,10 @@
 // react
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const API_KEY = import.meta.env.VITE_SECRET_API_KEY;
 
 const WeatherApp = () => {
-  const [city, setCity] = useState("");
+  const [city, setCity] = useState("Lyon");
   const [weatherData, setWeatherData] = useState(null);
   const [error, setError] = useState(null);
   const [favorites, setFavorites] = useState([]);
@@ -27,6 +27,11 @@ const WeatherApp = () => {
       );
     }
   };
+
+  // "Lyon" est la ville recherchée par défaut
+  useEffect(() => {
+    fetchWeatherData();
+  }, []);
 
   // ajoute la ville dans les favoris
   const addToFavorites = () => {
@@ -51,39 +56,36 @@ const WeatherApp = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center h-screen">
-      <div>
-        <div className="flex items-center m-10">
-          <input
-            className="w-auto border border-gray-300 rounded-md py-2 px-4 mr-2 focus:outline-none focus:border-blue-500"
-            type="text"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-            placeholder="Entrez le nom de la ville"
-          />
-          <button
-            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-            onClick={handleSearch}
-          >
-            Rechercher
-          </button>
-        </div>
+    <div className="flex flex-col items-center font-roboto">
+      <div className="flex items-center m-10">
+        <input
+          className="w-auto border border-gray-300 rounded-md py-2 px-4 mr-2 focus:outline-none focus:border-sky-500"
+          type="text"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          placeholder="Entrez le nom de la ville"
+        />
+        <button
+          className="bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-4 rounded"
+          onClick={handleSearch}
+        >
+          Rechercher
+        </button>
       </div>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}{" "}
       {weatherData && (
-        <div className="flex justify-center items-center flex-col">
-          <h2>{weatherData.name}</h2>
-          <p>Météo: {weatherData.weather[0].description}</p>
-          <p>Température: {weatherData.main.temp}°C</p>
-          <p>Ressenti: {weatherData.main.feels_like}°C</p>
-          <p>Vent: {weatherData.wind.speed} km/h</p>
+        <div className="flex justify-center items-center flex-col text-2xl">
+          <h2 className="m-4 text-4xl">🏙️ {weatherData.name}</h2>
+          <p>🌞 Météo: {weatherData.weather[0].description}</p>
+          <p>🌡️ Température: {weatherData.main.temp}°C</p>
+          <p>🍃 Vent: {weatherData.wind.speed} km/h</p>
           <button
-            className="text-2xl bg-blue-400 text-white px-4 py-2 shadow-md m-4"
+            className="bg-sky-500 hover:bg-sky-600 text-white font-bold px-4 py-2 shadow-md m-7 rounded"
             type="button"
             onClick={addToFavorites}
           >
-            Ajouter aux favoris
+            🩵 Ajouter aux favoris
           </button>
         </div>
       )}
